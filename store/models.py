@@ -5,8 +5,15 @@ from django.db import models
 
 # Create your models here.
 
-class Collection:
+class Promotion(models.Model):
+    description = models.CharField(max_length=100)
+    discount = models.FloatField()
+    
+
+class Collection(models.Model):
     title = models.CharField(max_length=255)
+    # the plus sign means that a reverse relation won't be created!
+    featured_product = models.ForeignKey('Product',on_delete=models.SET_NULL,null=True,related_name='+')
 
 class Product(models.Model):
     sku = models.CharField(max_length=10,primary_key=True)
@@ -16,6 +23,8 @@ class Product(models.Model):
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection,on_delete=models.CASCADE)
+    # all the availabe promotions
+    promotions = models.ManyToManyField(Promotion)
     
 
 class Customer(models.Model):
@@ -61,8 +70,8 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart,on_delete=models.PROTECT)
-    product = models.ForeignKey(Product,on_delete=models.PROTECT)
+    cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
 
