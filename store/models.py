@@ -44,6 +44,9 @@ class Customer(models.Model):
     phone = models.CharField(max_length=13)
     birth_date =models.DateTimeField(null=True)
     membership = models.CharField(max_length=1,choices=MEMBERSHIP_CHOICES,default=MEMEBERSHIP_BRONZE)
+
+    class Meta:
+        db_table = 'store_customers'
     
 class Order(models.Model):
     placed_at = models.DateTimeField(auto_now_add=True)
